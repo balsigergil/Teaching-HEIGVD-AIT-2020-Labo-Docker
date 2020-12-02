@@ -2,7 +2,7 @@
 FROM node:latest
 
 # TODO: [GEN] Replace with your name and email
-LABEL Daniel Palumbo <daniel.palumbo@heig-vd.ch>
+LABEL authors="Gil Balsiger <gil.balsiger@heig-vd.ch>, Julien Béguin <julien.beguin@heig-vd.ch>"
 
 # Install the required tools to run our webapp and some utils
 RUN apt-get update && apt-get -y install wget curl vim && apt-get clean && npm install -g bower
@@ -14,13 +14,19 @@ COPY app /backend/app
 RUN cd /backend/app && npm install && bower install --allow-root
 
 # TODO: [S6] Install
+RUN curl -sSLo /tmp/s6.tar.gz https://github.com/just-containers/s6-overlay/releases/download/v2.1.0.2/s6-overlay-amd64.tar.gz \
+  && tar xzf /tmp/s6.tar.gz -C / \
+  && rm -f /tmp/s6.tar.gz
+
 
 # TODO: [Serf] Install
 
 # TODO: [S6] Replace the two following instructions
+COPY services/node /etc/services.d/node
+RUN chmod +x /etc/services.d/node/run
 # Copy the starting script and make it executable
-COPY scripts /scripts/
-RUN chmod +x /scripts/*.sh
+#COPY scripts /scripts/
+#RUN chmod +x /scripts/*.sh
 
 # TODO: [Serf] Add Serf S6 setup
 
@@ -37,4 +43,5 @@ ENV ROLE backend
 
 # TODO: [S6] Replace the following instruction
 # Command executed when the container starts
-CMD [ "/scripts/run.sh" ]
+#CMD [ "/scripts/run.sh" ]
+ENTRYPOINT ["/init"]

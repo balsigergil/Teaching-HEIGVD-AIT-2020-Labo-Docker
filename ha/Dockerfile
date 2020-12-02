@@ -28,7 +28,9 @@ RUN mkdir /opt/bin \
 COPY services/ha /etc/services.d/ha
 RUN chmod +x /etc/services.d/ha/run
 
-# TODO: [Serf] Add Serf S6 setup
+# Add Serf to S6
+COPY services/serf /etc/services.d/serf
+RUN chmod +x /etc/services.d/serf/run
 
 # TODO: [Serf] Copy events handler scripts
 
@@ -43,7 +45,8 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # TODO: [CFG] Create the nodes folder
 
-# TODO: [Serf] Expose ports
+# Expose the ports for Serf
+EXPOSE 7946 7373
 
 # Expose the HA proxy ports
 EXPOSE 80 1936

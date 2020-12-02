@@ -33,6 +33,11 @@ RUN chmod +x /etc/services.d/node/run
 COPY services/serf /etc/services.d/serf
 RUN chmod +x /etc/services.d/serf/run
 
+# Copy events handler scripts
+RUN mkdir /serf-handlers
+COPY scripts/* /serf-handlers/
+RUN chmod +x /serf-handlers/*
+
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

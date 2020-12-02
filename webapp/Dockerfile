@@ -1,7 +1,7 @@
 # The base image is one of the offical one
 FROM node:latest
 
-# TODO: [GEN] Replace with your name and email
+# Name and email
 LABEL authors="Gil Balsiger <gil.balsiger@heig-vd.ch>, Julien Béguin <julien.beguin@heig-vd.ch>"
 
 # Install the required tools to run our webapp and some utils
@@ -13,20 +13,21 @@ RUN apt-get update && apt-get -y install wget curl vim && apt-get clean && npm i
 COPY app /backend/app
 RUN cd /backend/app && npm install && bower install --allow-root
 
-# TODO: [S6] Install
+# Download and install S6 overlay
 RUN curl -sSLo /tmp/s6.tar.gz https://github.com/just-containers/s6-overlay/releases/download/v2.1.0.2/s6-overlay-amd64.tar.gz \
   && tar xzf /tmp/s6.tar.gz -C / \
   && rm -f /tmp/s6.tar.gz
 
+# Install serf (for decentralized cluster membership: https://www.serf.io/)
+RUN mkdir /opt/bin \
+    && curl -sSLo /tmp/serf.gz https://releases.hashicorp.com/serf/0.8.2/serf_0.8.2_linux_amd64.zip \
+    && gunzip -c /tmp/serf.gz > /opt/bin/serf \
+    && chmod 755 /opt/bin/serf \
+    && rm -f /tmp/serf.gz
 
-# TODO: [Serf] Install
-
-# TODO: [S6] Replace the two following instructions
+# Copy the S6 service and make the run script executable
 COPY services/node /etc/services.d/node
 RUN chmod +x /etc/services.d/node/run
-# Copy the starting script and make it executable
-#COPY scripts /scripts/
-#RUN chmod +x /scripts/*.sh
 
 # TODO: [Serf] Add Serf S6 setup
 
@@ -41,7 +42,5 @@ EXPOSE 3000
 # Define an environment variable for the role of the container
 ENV ROLE backend
 
-# TODO: [S6] Replace the following instruction
-# Command executed when the container starts
-#CMD [ "/scripts/run.sh" ]
+# This will start S6 as our main process in our container
 ENTRYPOINT ["/init"]

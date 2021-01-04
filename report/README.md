@@ -7,12 +7,14 @@
 
 ### Questions
 
-1. **[M1]**: 
+1. **[M1]**: The main problem is that we have a static configuration for our load balancer. We need to update it manually if we add new backend nodes. This isn't much scalable. This isn't suitable for production as there is manual action needed in case of hardware update or problem.
 1. **[M2]**: 
-1. **[M3]**: 
+1. **[M3]**: A better solution would be to have a dynamic configuration for HAProxy so we can add new backend nodes and the configuration will be refreshed automatically.
 1. **[M4]**: 
-1. **[M5]**: 
-1. **[M6]**: 
+1. **[M5]**: We currently have one specific service running on each container at a time. We cannot start multiple services as we want to push log to a central place. If we want to start multiple services per container we need to run a service that will start our service for us so we can start as many services as we want. We will use S6 during the lab.
+
+We can use [logstash](https://www.elastic.co/fr/logstash), [elasticsearch](https://www.elastic.co/fr/elasticsearch/) and [kibana](https://www.elastic.co/fr/kibana) to manage log for our applications and [beats](https://www.elastic.co/fr/beats/) to push logs to to the ELK stack (elasticsearch, logstash, kibana).
+1. **[M6]**:
 
 ### Deliverables
 

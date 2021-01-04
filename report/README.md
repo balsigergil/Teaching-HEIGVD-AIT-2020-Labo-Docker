@@ -114,7 +114,7 @@ See file `5-ha-serf.log` in `logs/task3/`
 
 > 2\. Propose a different approach to architecture our images to be able to reuse as much as possible what we have done. Your proposition should also try to avoid as much as possible repetitions between your images.
 
-
+We can use image inheritance in the Dockerfile with the `FROM` keyword. We create a base image with all thing in common and 2 other smaller images for HAProxy and NodeJS.
 
 > 3\. Provide the `/tmp/haproxy.cfg` file generated in the `ha` container after each step. Place the output into the `logs` folder like you already did for the Docker logs in the previous tasks. Three files are expected.
 

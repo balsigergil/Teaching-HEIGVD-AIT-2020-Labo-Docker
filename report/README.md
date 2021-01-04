@@ -34,11 +34,16 @@ https://github.com/balsigergil/Teaching-HEIGVD-AIT-2020-Labo-Docker forked from 
 
 > 2\. Describe your difficulties for this task and your understanding of what is happening during this task. Explain in your own words why are we installing a process supervisor. Do not hesitate to do more research and to find more articles on that topic to illustrate the problem.
 
+We didn't face any problem during that task. This was quite strait forward to follow and relatively easy to realize.
+
+The answer of **M5** answers why we are installing a process supervisor.
 
 
 ## Task 2: Add a tool to manage membership in the web server cluster
 
 > Anyway, in our current solution, there is kind of misconception around the way we create the `Serf` cluster. In the deliverables, describe which problem exists with the current solution based on the previous explanations and remarks. Propose a solution to solve the issue.
+
+
 
 ### Deliverables
 
@@ -56,11 +61,15 @@ https://github.com/balsigergil/Teaching-HEIGVD-AIT-2020-Labo-Docker forked from 
 >
 > 2. Give the answer to the question about the existing problem with the current solution.
 
-Pas de problèmes lol
+As we can see in the log of task 2, we didn't face any problem with Serf. The main issue is that we currently have no script to handle new node joining the cluster.
 
 > 3. Give an explanation on how `Serf` is working. Read the official website to get more details about the `GOSSIP` protocol used in `Serf`. Try to find other solutions that can be used to solve similar situations where we need some auto-discovery mechanism.
 
+Serf uses the Gossip protocol. Gossip is a peer-to-peer protocol used to communicate information over all connected nodes in the network like epidemics spread.
 
+In our case, it will be used to maintain a catalog of nodes for HAProxy.
+
+An other solution would be to use Consul as written before. Consul uses Serf and do the same thing and much more like health check of services.
 
 ## Task 3: React to membership changes
 

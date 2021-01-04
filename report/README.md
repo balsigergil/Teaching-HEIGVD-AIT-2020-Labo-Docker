@@ -3,6 +3,8 @@
 > Authors: Gil Balsiger & Julien Béguin  
 > Date: 02.12.2020
 
+
+
 ## Task 0: Identify issues and install the tools
 
 ### Questions
@@ -24,6 +26,8 @@
 
 https://github.com/balsigergil/Teaching-HEIGVD-AIT-2020-Labo-Docker forked from https://github.com/SoftEng-HEIGVD/Teaching-HEIGVD-AIT-2020-Labo-Docker
 
+
+
 ## Task 1: Add a process supervisor to run several processes
 
 ### Deliverables
@@ -37,6 +41,8 @@ https://github.com/balsigergil/Teaching-HEIGVD-AIT-2020-Labo-Docker forked from 
 We didn't face any problem during that task. This was quite strait forward to follow and relatively easy to realize.
 
 The answer of **M5** answers why we are installing a process supervisor.
+
+
 
 
 ## Task 2: Add a tool to manage membership in the web server cluster
@@ -66,6 +72,8 @@ Serf uses the Gossip protocol. Gossip is a peer-to-peer protocol used to communi
 In our case, it will be used to maintain a catalog of nodes for HAProxy.
 
 An other solution would be to use Consul as written before. Consul uses Serf and do the same thing and much more like health check of services.
+
+
 
 ## Task 3: React to membership changes
 
@@ -109,18 +117,53 @@ See file `5-ha-serf.log` in `logs/task3/`
 
 
 > 3\. Provide the `/tmp/haproxy.cfg` file generated in the `ha` container after each step. Place the output into the `logs` folder like you already did for the Docker logs in the previous tasks. Three files are expected.
->
->    In addition, provide a log file containing the output of the `docker ps` console and another file (per container) with `docker inspect <container>`. Four files are expected.
->
+
+See files `haproxy_lb.cfg  haproxy_s2.cfg haproxy_s1.cfg` in `logs/task4/`
+
+> In addition, provide a log file containing the output of the `docker ps` console and another file (per container) with `docker inspect <container>`. Four files are expected.
+
+See files `docker-inspect-ha.log  docker-inspect-s2.log docker-inspect-s1.log  docker-ps.log` in `logs/task4/`
+
 > 4\. Based on the three output files you have collected, what can you say about the way we generate it? What is the problem if any?
+
+```
+Container 0410c67fc008 has joined the Serf cluster with the following IP address: 192.168.42.42
+Container 689c3667b6b4 has joined the Serf cluster with the following IP address: 192.168.42.11
+Container 8e37d8f7f9f2 has joined the Serf cluster with the following IP address: 192.168.42.22
+```
+
+This prove that Serf and the template engine is working as expected. This is just a PoC. Now we need to use the template engine to generate a valid HAProxy configuration.
 
 
 
 ### Task 5: Generate a new load balancer configuration when membership changes
 
+> 1. Provide the file `/usr/local/etc/haproxy/haproxy.cfg` generated in the `ha` container after each step. Three files are expected.
+
+See file `01_ha_started.cfg 02_first_started.cfg 03_second_started.cfg 04_first_stopped.cfg` in `logs/task5/`
+
+>    In addition, provide a log file containing the output of the `docker ps` console and another file (per container) with `docker inspect <container>`. Four files are expected.
+
+See file `03_docker_ps.log 03_docker_inspect_ha.log 03_docker_inspect_s1.log 03_docker_inspect_s2.log` in `logs/task5/`
+
+
+> 2. Provide the list of files from the `/nodes` folder inside the `ha` container. One file expected with the command output.
+
+See file `nodes_folder_content.md` in `logs/task5/`
+
+
+> 3. Provide the configuration file after you stopped one container and the list of nodes present in the `/nodes` folder. One file expected with the command output. Two files are expected.
+>
+>    In addition, provide a log file containing the output of the `docker ps` console. One file expected.
+
+See files `04_docker_ps.log 04_first_stopped.cfg nodes_folder_content.md` in `logs/task5/`
+
+
 > 4\. (Optional:) Propose a different approach to manage the list of backend nodes. You do not need to implement it. You can also propose your own tools or the ones you discovered online. In that case, do not forget to cite your references.
 
 We can use a tool called [Consul](https://www.consul.io/) by [HashiCorp](https://www.hashicorp.com/). It can be used for service discovery and manage a list of backend nodes with applications running on them and performs health checks to keep the list up to date with alive nodes. It can be also used for load balancing between backend nodes. HAProxy configuration can also be generated from Consul with [consul-template](https://github.com/hashicorp/consul-template) instead of self made script. Consul also uses Serf for p2p networking and [gossip protocol](https://www.consul.io/docs/architecture/gossip).
+
+
 
 ### Task 6: Make the load balancer automatically reload the new configuration
 

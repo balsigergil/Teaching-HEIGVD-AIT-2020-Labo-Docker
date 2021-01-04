@@ -1,0 +1,4 @@
+CONTAINER ID   IMAGE                  COMMAND   CREATED          STATUS              PORTS                                                                                    NAMES
+d771a8aec7cd   labo4-docker_webapp2   "/init"   13 minutes ago   Up About a minute   7373/tcp, 7946/tcp, 0.0.0.0:4001->3000/tcp                                               s2
+0ab07ae2611e   labo4-docker_webapp1   "/init"   13 minutes ago   Up 13 minutes       7373/tcp, 7946/tcp, 0.0.0.0:4000->3000/tcp                                               s1
+38b6f70f1259   labo4-docker_haproxy   "/init"   13 minutes ago   Up 13 minutes       0.0.0.0:80->80/tcp, 7373/tcp, 0.0.0.0:1936->1936/tcp, 0.0.0.0:9999->9999/tcp, 7946/tcp   ha

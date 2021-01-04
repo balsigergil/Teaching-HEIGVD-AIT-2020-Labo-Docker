@@ -8,13 +8,11 @@
 ### Questions
 
 1. **[M1]**: The main problem is that we have a static configuration for our load balancer. We need to update it manually if we add new backend nodes. This isn't much scalable. This isn't suitable for production as there is manual action needed in case of hardware update or problem.
-1. **[M2]**: 
+1. **[M2]**: In this configuration, if we want to add a new backend node, we first need to start a new webapp container with its own name and IP. Then we need to modify the HAProxy configuration to add our new backend node. Finally, we need to reload HAProxy for it to take into account the new configuration. This
 1. **[M3]**: A better solution would be to have a dynamic configuration for HAProxy so we can add new backend nodes and the configuration will be refreshed automatically.
-1. **[M4]**: 
-1. **[M5]**: We currently have one specific service running on each container at a time. We cannot start multiple services as we want to push log to a central place. If we want to start multiple services per container we need to run a service that will start our service for us so we can start as many services as we want. We will use S6 during the lab.
-
-We can use [logstash](https://www.elastic.co/fr/logstash), [elasticsearch](https://www.elastic.co/fr/elasticsearch/) and [kibana](https://www.elastic.co/fr/kibana) to manage log for our applications and [beats](https://www.elastic.co/fr/beats/) to push logs to to the ELK stack (elasticsearch, logstash, kibana).
-1. **[M6]**:
+1. **[M4]**: We need a service that is capable of telling us which backend node is up at any time. This can be archived by a service discovery tool like Consul that will update the HAProxy config whenever a backend node join or leave the pool.
+1. **[M5]**: We currently have one specific service running on each container at a time. We cannot start multiple services as we want to push log to a central place. If we want to start multiple services per container we need to run a service that will start our service for us so we can start as many services as we want. We will use S6 during the lab. We can use [logstash](https://www.elastic.co/fr/logstash), [elasticsearch](https://www.elastic.co/fr/elasticsearch/) and [kibana](https://www.elastic.co/fr/kibana) to manage log for our applications and [beats](https://www.elastic.co/fr/beats/) to push logs to to the ELK stack (elasticsearch, logstash, kibana).
+1. **[M6]**: If we add more server nodes, we still have the modify the HAProxy configuration to add more `sed` lines. This is not dynamic at all. We need to be able to loop into the list of node and print the configuration for each node. This can be archived with a template engine.
 
 ### Deliverables
 
@@ -108,3 +106,5 @@ Pas de problèmes lol
 > 4. (Optional:) Propose a different approach to manage the list of backend nodes. You do not need to implement it. You can also propose your own tools or the ones you discovered online. In that case, do not forget to cite your references.
 
 We can use a tool called [Consul](https://www.consul.io/) by [HashiCorp](https://www.hashicorp.com/). It can be used for service discovery and manage a list of backend nodes with applications running on them and performs health checks to keep the list up to date with alive nodes. It can be also used for load balancing between backend nodes. HAProxy configuration can also be generated from Consul with [consul-template](https://github.com/hashicorp/consul-template) instead of self made script. Consul also uses Serf for p2p networking and [gossip protocol](https://www.consul.io/docs/architecture/gossip).
+
+### Task 6: Make the load balancer automatically reload the new configuration

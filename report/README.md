@@ -34,6 +34,8 @@ https://github.com/balsigergil/Teaching-HEIGVD-AIT-2020-Labo-Docker forked from 
 
 > 2\. Describe your difficulties for this task and your understanding of what is happening during this task. Explain in your own words why are we installing a process supervisor. Do not hesitate to do more research and to find more articles on that topic to illustrate the problem.
 
+TODO
+
 
 
 ## Task 2: Add a tool to manage membership in the web server cluster
@@ -53,21 +55,28 @@ https://github.com/balsigergil/Teaching-HEIGVD-AIT-2020-Labo-Docker forked from 
 >        |-- task 3
 >        |-- ...
 >    ```
->
+
+TODO
+
 > 2. Give the answer to the question about the existing problem with the current solution.
 
-Pas de problèmes lol
+Pas de problèmes lol TODO
 
 > 3. Give an explanation on how `Serf` is working. Read the official website to get more details about the `GOSSIP` protocol used in `Serf`. Try to find other solutions that can be used to solve similar situations where we need some auto-discovery mechanism.
 
-
+TODO
 
 ## Task 3: React to membership changes
 
 **Deliverables**:
 
 > 1. Provide the docker log output for each of the containers: `ha`, `s1` and `s2`. Put your logs in the `logs` directory you created in the previous task.
+
+See files `1-ha.logs  2-s1.logs  3-ha-after-s1-started.logs  4-s2.logs` in `logs/task3/`
+
 > 2. Provide the logs from the `ha` container gathered directly from the `/var/log/serf.log` file present in the container. Put the logs in the `logs` directory in your repo.
+
+See file `5-ha-serf.log` in `logs/task3/`
 
 
 
@@ -103,8 +112,49 @@ Pas de problèmes lol
 
 ### Task 5: Generate a new load balancer configuration when membership changes
 
+TODO
+
 > 4. (Optional:) Propose a different approach to manage the list of backend nodes. You do not need to implement it. You can also propose your own tools or the ones you discovered online. In that case, do not forget to cite your references.
 
 We can use a tool called [Consul](https://www.consul.io/) by [HashiCorp](https://www.hashicorp.com/). It can be used for service discovery and manage a list of backend nodes with applications running on them and performs health checks to keep the list up to date with alive nodes. It can be also used for load balancing between backend nodes. HAProxy configuration can also be generated from Consul with [consul-template](https://github.com/hashicorp/consul-template) instead of self made script. Consul also uses Serf for p2p networking and [gossip protocol](https://www.consul.io/docs/architecture/gossip).
 
 ### Task 6: Make the load balancer automatically reload the new configuration
+
+> 1. Take a screenshots of the HAProxy stat page showing more than 2 web applications running. Additional screenshots are welcome to see a sequence of experimentations like shutting down a node and starting more nodes.
+>
+>    Also provide the output of `docker ps` in a log file. At least one file is expected. You can provide one output per step of your experimentation according to your screenshots.
+
+We started the infrastructure with 3 nodes (01a) then stopped 2 nodes (01b) and finally restarted 1 node (01c). See files in `logs/task6/`. 
+
+> 2. Give your own feelings about the final solution. Propose improvements or ways to do the things differently. If any, provide references to your readings for the improvements.
+
+HAProxy seems pretty reactive when we add or remove a node. The current configuration is working fine if we only need a small number of nodes. 
+
+However, our configuration become limited if we need a large amount of node (>20). The problem is due to the configuration of the container orchestrator (docker-compose) because we hardcoded the node. 
+
+We can solve this problem by defining only one node on the docker-compose.yml and adding a `replicas` value :
+
+```
+services :
+  webapp:
+    deploy:
+      replicas: 20
+```
+
+ Then, we can start our infra with :
+
+```
+docker-compose --compatibility up -d
+```
+
+And scale as we want the number of nodes :
+
+```
+docker-compose --compatibility up -d --scale webapp=15
+docker-compose --compatibility up -d --scale webapp=25
+docker-compose --compatibility up -d --scale webapp=8
+```
+
+> Reference : https://docs.docker.com/compose/compose-file/compose-file-v3/#replicas
+>
+> Example of utilization : https://github.com/balsigergil/RES-HTTPInfra/tree/step8_dynamic_cluster_mgmt#step-8--dynamic-cluster-management

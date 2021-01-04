@@ -34,25 +34,16 @@ https://github.com/balsigergil/Teaching-HEIGVD-AIT-2020-Labo-Docker forked from 
 
 > 2\. Describe your difficulties for this task and your understanding of what is happening during this task. Explain in your own words why are we installing a process supervisor. Do not hesitate to do more research and to find more articles on that topic to illustrate the problem.
 
-<<<<<<< HEAD
-TODO
-
-=======
 We didn't face any problem during that task. This was quite strait forward to follow and relatively easy to realize.
 
 The answer of **M5** answers why we are installing a process supervisor.
->>>>>>> 4dabf73954b0b06bfdbacccb66b7eb817d5e76e2
 
 
 ## Task 2: Add a tool to manage membership in the web server cluster
 
-> Anyway, in our current solution, there is kind of misconception around the way we create the `Serf` cluster. In the deliverables, describe which problem exists with the current solution based on the previous explanations and remarks. Propose a solution to solve the issue.
-
-
-
 ### Deliverables
 
-> 1. Provide the docker log output for each of the containers: `ha`, `s1` and `s2`. You need to create a folder `logs` in your repository to store the files separately from the lab report. For each lab task create a folder and name it using the task number. No need to create a folder when there are no logs.
+> 1\. Provide the docker log output for each of the containers: `ha`, `s1` and `s2`. You need to create a folder `logs` in your repository to store the files separately from the lab report. For each lab task create a folder and name it using the task number. No need to create a folder when there are no logs.
 >
 >    Example:
 >
@@ -63,38 +54,28 @@ The answer of **M5** answers why we are installing a process supervisor.
 >        |-- task 3
 >        |-- ...
 >    ```
+>
+> 2\. Give the answer to the question about the existing problem with the current solution.
 
-TODO
-
-> 2. Give the answer to the question about the existing problem with the current solution.
-
-<<<<<<< HEAD
-Pas de problèmes lol TODO
-
-> 3. Give an explanation on how `Serf` is working. Read the official website to get more details about the `GOSSIP` protocol used in `Serf`. Try to find other solutions that can be used to solve similar situations where we need some auto-discovery mechanism.
-
-TODO
-=======
 As we can see in the log of task 2, we didn't face any problem with Serf. The main issue is that we currently have no script to handle new node joining the cluster.
 
-> 3. Give an explanation on how `Serf` is working. Read the official website to get more details about the `GOSSIP` protocol used in `Serf`. Try to find other solutions that can be used to solve similar situations where we need some auto-discovery mechanism.
+> 3\. Give an explanation on how `Serf` is working. Read the official website to get more details about the `GOSSIP` protocol used in `Serf`. Try to find other solutions that can be used to solve similar situations where we need some auto-discovery mechanism.
 
 Serf uses the Gossip protocol. Gossip is a peer-to-peer protocol used to communicate information over all connected nodes in the network like epidemics spread.
 
 In our case, it will be used to maintain a catalog of nodes for HAProxy.
 
 An other solution would be to use Consul as written before. Consul uses Serf and do the same thing and much more like health check of services.
->>>>>>> 4dabf73954b0b06bfdbacccb66b7eb817d5e76e2
 
 ## Task 3: React to membership changes
 
 **Deliverables**:
 
-> 1. Provide the docker log output for each of the containers: `ha`, `s1` and `s2`. Put your logs in the `logs` directory you created in the previous task.
+> 1\. Provide the docker log output for each of the containers: `ha`, `s1` and `s2`. Put your logs in the `logs` directory you created in the previous task.
 
 See files `1-ha.logs  2-s1.logs  3-ha-after-s1-started.logs  4-s2.logs` in `logs/task3/`
 
-> 2. Provide the logs from the `ha` container gathered directly from the `/var/log/serf.log` file present in the container. Put the logs in the `logs` directory in your repo.
+> 2\. Provide the logs from the `ha` container gathered directly from the `/var/log/serf.log` file present in the container. Put the logs in the `logs` directory in your repo.
 
 See file `5-ha-serf.log` in `logs/task3/`
 
@@ -104,7 +85,7 @@ See file `5-ha-serf.log` in `logs/task3/`
 
 **Deliverables**:
 
-> 1. You probably noticed when we added `xz-utils`, we have to rebuild the whole image which took some time. What can we do to mitigate that? Take a look at the Docker documentation on [image layers](https://docs.docker.com/engine/userguide/storagedriver/imagesandcontainers/#images-and-layers). Tell us about the pros and cons to merge as much as possible of the command. In other words, compare:
+> 1\. You probably noticed when we added `xz-utils`, we have to rebuild the whole image which took some time. What can we do to mitigate that? Take a look at the Docker documentation on [image layers](https://docs.docker.com/engine/userguide/storagedriver/imagesandcontainers/#images-and-layers). Tell us about the pros and cons to merge as much as possible of the command. In other words, compare:
 >
 > ```
 > RUN command 1
@@ -119,22 +100,25 @@ See file `5-ha-serf.log` in `logs/task3/`
 > ```
 >
 > There are also some articles about techniques to reduce the image size. Try to find them. They are talking about `squashing` or `flattening` images.
->
-> 2. Propose a different approach to architecture our images to be able to reuse as much as possible what we have done. Your proposition should also try to avoid as much as possible repetitions between your images.
->
-> 3. Provide the `/tmp/haproxy.cfg` file generated in the `ha` container after each step. Place the output into the `logs` folder like you already did for the Docker logs in the previous tasks. Three files are expected.
+
+- http://jasonwilder.com/blog/2014/08/19/squashing-docker-images/
+- https://l10nn.medium.com/flattening-docker-images-bafb849912ff
+
+> 2\. Propose a different approach to architecture our images to be able to reuse as much as possible what we have done. Your proposition should also try to avoid as much as possible repetitions between your images.
+
+
+
+> 3\. Provide the `/tmp/haproxy.cfg` file generated in the `ha` container after each step. Place the output into the `logs` folder like you already did for the Docker logs in the previous tasks. Three files are expected.
 >
 >    In addition, provide a log file containing the output of the `docker ps` console and another file (per container) with `docker inspect <container>`. Four files are expected.
 >
-> 4. Based on the three output files you have collected, what can you say about the way we generate it? What is the problem if any?
+> 4\. Based on the three output files you have collected, what can you say about the way we generate it? What is the problem if any?
 
 
 
 ### Task 5: Generate a new load balancer configuration when membership changes
 
-TODO
-
-> 4. (Optional:) Propose a different approach to manage the list of backend nodes. You do not need to implement it. You can also propose your own tools or the ones you discovered online. In that case, do not forget to cite your references.
+> 4\. (Optional:) Propose a different approach to manage the list of backend nodes. You do not need to implement it. You can also propose your own tools or the ones you discovered online. In that case, do not forget to cite your references.
 
 We can use a tool called [Consul](https://www.consul.io/) by [HashiCorp](https://www.hashicorp.com/). It can be used for service discovery and manage a list of backend nodes with applications running on them and performs health checks to keep the list up to date with alive nodes. It can be also used for load balancing between backend nodes. HAProxy configuration can also be generated from Consul with [consul-template](https://github.com/hashicorp/consul-template) instead of self made script. Consul also uses Serf for p2p networking and [gossip protocol](https://www.consul.io/docs/architecture/gossip).
 
